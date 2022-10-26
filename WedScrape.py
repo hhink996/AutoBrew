@@ -9,10 +9,17 @@ from urllib.request import urlopen
 import re
 import time
 
+# Gets the IP of the pi from the user
+def GetIp():
+    ip = input('What is the IP address of your Pi?\n')
+    return ip
+
 # Goes to the pi's website and returns the html text
-def GetHTML():
+def GetHTML(ip):
     # Opens the website with the data from the raspberry pi
-    url = "http://10.250.23.126:5000/data"
+    first = "http://"
+    last = ":5000/data"
+    url = first + ip + last
     page = urlopen(url)
 
     # Gets and decodes the html text
@@ -64,7 +71,8 @@ def RefineData(rawData):
 
 # Main function that gets and prints the data from the website every 20 seconds
 def main():
-    html = GetHTML()
+    ip = GetIp()
+    html = GetHTML(ip)
     header = GetHeader(html)
     rawData = GetData(html)
     angle, tempC, tempF = RefineData(rawData)
@@ -73,7 +81,7 @@ def main():
 
     # continuously get and print the data from the website, every 20 seconds
     while True:
-        html = GetHTML()
+        html = GetHTML(ip)
         rawData = GetData(html)
         angle, tempC, tempF = RefineData(rawData)
         print("\n" + str(angle) + "\n" + str(tempC) + "\n" + str(tempF))
