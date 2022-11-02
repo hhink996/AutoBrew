@@ -54,7 +54,7 @@ app = Flask(__name__)
 def index():
 	angle = GetGyro()
 	tempC, tempF = GetTemp()
-	data = {'Angle': angle, 'TempC': str(tempC), 'TempF': str(tempF)}
+	data = [{'Angle': angle, 'TempC': str(tempC), 'TempF': str(tempF)}]
 	return render_template('index.html', data=data)
 
 @app.route('/data')
