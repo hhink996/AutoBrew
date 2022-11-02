@@ -1,4 +1,4 @@
-window.onload = funciton() {
+window.onload = funciton () {
     var url, i, jqxhr;
 
     url = document.URL + 'inputs/';
@@ -6,4 +6,4 @@ window.onload = funciton() {
         console.log('API responce received');
         $('#data').append('<p>Gryp: ' + data['Angle'] + '\nTempC: ' + data['TempC'] + '\nTempF: ' + data['TempF'] + '</p>');
     });
-}
+};
