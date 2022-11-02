@@ -1,13 +1,12 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 	<head>
+		<meta charset="utf-8" />
 		<link rel="stylesheet" href='/static/style.css' />
+		{{data|tojson}}
 	</head>
 	<body>
 		<h1>Auto Brew</h1>
-		<!--<a href="/temperature">Temperature</a><br>
-		<a href="/angle">Angle Reading</a><br>-->
-		<a href="/data">
-			<button type="button">Click Me!</button>
-		</a>
+		<div id="data"></div>
 	</body>
 </html>

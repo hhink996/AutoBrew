@@ -52,7 +52,10 @@ app = Flask(__name__)
 @app.route('/')
 # name of the route (index for the home page)
 def index():
-	return render_template('index.html')
+	angle = GetGyro()
+	tempC, tempF = GetTemp()
+	data = {'Angle': angle, 'TempC': str(tempC), 'TempF': str(tempF)}
+	return render_template('index.html', data=data)
 
 @app.route('/data')
 def data():
@@ -61,18 +64,6 @@ def data():
 	listObject = [angle, str(tempC), str(tempF)]
 	return render_template('data.html', listToSend = listObject)
 
-# page to get temperature
-@app.route('/temperature')
-def temperatur():
-	return render_template('temp.html')
-
-# page to get angle reading
-@app.route('/angle')
-def angle():
-	return render_template('angle.html')
-
 # host = '0.0.0.0' means any device can access the web app
 if __name__ == '__main__':
-	#from waitress import serve
-	#serve(app, host="0.0.0.0", port=8080)
 	app.run(host = '0.0.0.0')
