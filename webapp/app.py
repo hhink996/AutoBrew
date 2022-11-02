@@ -58,7 +58,7 @@ def index():
 	inputs = [{'Angle': angle, 'TempC': str(tempC), 'TempF': str(tempF)}]
 	return render_template('index.html', data=inputs)
 
-@app.route('/inputs')
+@app.route('/inputs/:id')
 def inputs():
 	angle = GetGyro()
 	tempC, tempF = GetTemp()
