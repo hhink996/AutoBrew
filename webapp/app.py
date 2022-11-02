@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+from flask import Response
 from mpu6050 import mpu6050
 import time
 import os
@@ -62,7 +63,7 @@ def inputs():
 	angle = GetGyro()
 	tempC, tempF = GetTemp()
 	inputs = [{'Angle': angle, 'TempC': str(tempC), 'TempF': str(tempF)}]
-	return inputs
+	return Response(inputs, status=200)
 
 @app.route('/data')
 def data():
