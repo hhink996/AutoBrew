@@ -1,4 +1,4 @@
-window.onload = funciton () {
+window.onload = function () {
     var url, i, jqxhr;
 
     url = document.URL + 'inputs/';
