@@ -10,7 +10,7 @@ def GetGyro():
 	#from mpu6050 import mpu6050
 	mpu = mpu6050(0x68)
 	data = mpu.get_accel_data()
-	dataString = str(data['x'])
+	dataString = str(data['y'])
 	return dataString
 
 # reads the raw temperature data
