@@ -4,6 +4,7 @@ from mpu6050 import mpu6050
 import time
 import os
 import glob
+import json
 
 # get the angle of the sensor
 def GetGyro():
@@ -55,15 +56,10 @@ app = Flask(__name__)
 def index():
 	angle = GetGyro()
 	tempC, tempF = GetTemp()
-	inputs = [{'Angle': angle, 'TempC': str(tempC), 'TempF': str(tempF)}]
+	#x = {"Angle": angle, "TempC": str(tempC), "TempF": str(tempF)}
+	#inputs = json.dumps(x)
+	inputs = {'Angle': angle, 'TempC': str(tempC), 'TempF': str(tempF)}
 	return render_template('index.html', data=inputs)
-
-@app.route('/inputs/:id')
-def inputs():
-	angle = GetGyro()
-	tempC, tempF = GetTemp()
-	inputs = [{'Angle': angle, 'TempC': str(tempC), 'TempF': str(tempF)}]
-	return Response(inputs, status=200)
 
 @app.route('/data')
 def data():
