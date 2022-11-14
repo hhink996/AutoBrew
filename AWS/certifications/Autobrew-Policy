@@ -1,0 +1,41 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iot:Publish",
+        "iot:Receive"
+      ],
+      "Resource": [
+        "arn:aws:iot:us-east-1:287923911800:topic/sdk/test/java",
+        "arn:aws:iot:us-east-1:287923911800:topic/sdk/test/Python",
+        "arn:aws:iot:us-east-1:287923911800:topic/topic_1",
+        "arn:aws:iot:us-east-1:287923911800:topic/topic_2"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iot:Subscribe"
+      ],
+      "Resource": [
+        "arn:aws:iot:us-east-1:287923911800:topicfilter/sdk/test/java",
+        "arn:aws:iot:us-east-1:287923911800:topicfilter/sdk/test/Python",
+        "arn:aws:iot:us-east-1:287923911800:topicfilter/topic_1",
+        "arn:aws:iot:us-east-1:287923911800:topicfilter/topic_2"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iot:Connect"
+      ],
+      "Resource": [
+        "arn:aws:iot:us-east-1:287923911800:client/sdk-java",
+        "arn:aws:iot:us-east-1:287923911800:client/basicPubSub",
+        "arn:aws:iot:us-east-1:287923911800:client/sdk-nodejs-*"
+      ]
+    }
+  ]
+}
