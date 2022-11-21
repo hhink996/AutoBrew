@@ -8,7 +8,9 @@ import glob
 import AWSIoTPythonSDK.MQTTLib as AWSIoTPyMQTT
 myAWSIoTMQTTClient = AWSIoTPyMQTT.AWSIoTMQTTClient("Autobrew")
 myAWSIoTMQTTClient.configureEndpoint("a1ccba331h2nwv-ats.iot.us-east-1.amazonaws.com", 8883)
-myAWSIoTMQTTClient.configureCredentials("/home/autobrew/newAWS/root.pem", "/home/autobrew/newAWS/52bb41a1458b2921258a054b70b8de75c99a4680d9ca9d933e9e727e3730896e-private.pem.key", "/home/autobrew/newAWS/52bb41a1458b2921258a054b70b8de75c99a4680d9ca9d933e9e727e3730896e-certificate.pem.crt")
+myAWSIoTMQTTClient.configureCredentials("/home/autobrew/newAWS/root.pem", 
+	"/home/autobrew/newAWS/52bb41a1458b2921258a054b70b8de75c99a4680d9ca9d933e9e727e3730896e-private.pem.key", 
+	"/home/autobrew/newAWS/52bb41a1458b2921258a054b70b8de75c99a4680d9ca9d933e9e727e3730896e-certificate.pem.crt")
 
 #inititialize AWS connection
 myAWSIoTMQTTClient.connect()
@@ -56,33 +58,33 @@ def GetTemp():
 	temp_c, temp_f = read_temp(device_file)
 	return temp_c, temp_f
 
-i= 0
-#print to screen and send to AWS in json format
-while True:
-    angle = GetGyro()
-    temp_c, temp_f = GetTemp()
+def main():
+	i= 0
+	#print to screen and send to AWS in json format
+	while True:
+    		angle = GetGyro()
+    		temp_c, temp_f = GetTemp()
 
-    payloadmsg0 = "{"
-    payloadmsg1 = " \"temp_c\": "
-    payloadmsg2 = " \"angle\": "
-    payloadmsg3 = " }"
+    		payloadmsg0 = "{\n"
+	    	payloadmsg1 = " \"temp_c\": "
+    		payloadmsg4 = ",\n "
+    		payloadmsg2 = " \"angle\": "
+    		payloadmsg3 = "\n}"
 
-    payloadmsg = "{} {} {} {} {} {}".format(payloadmsg0, payloadmsg1, temp_c, payloadmsg2, angle, payloadmsg3)
-    payloadmsg = json.dumps(payloadmsg)
-    payloadmsg_json = json.loads(payloadmsg)
+    		payloadmsg = "{} {} {} {} {} {} {}".format(payloadmsg0, payloadmsg1, temp_c, payloadmsg4, payloadmsg2, angle, payloadmsg3)
+    		payloadmsg = json.dumps(payloadmsg)
+    		payloadmsg_json = json.loads(payloadmsg)
 
-    myAWSIoTMQTTClient.publish("sensor-info", payloadmsg_json, 1)
+    		myAWSIoTMQTTClient.publish("sensor-info", payloadmsg_json, 1)
 
-    print("Published ", i, " to the topic: sensor-info")
-    i = i + 1
+    		print("Published ", i, " to the topic: sensor-info")
+    		i = i + 1
 
-    time.sleep(5)
+    		time.sleep(5)
 
-print("Program ended early")
+	print("Program ended early")
+	#disconnect if loop is broken
+	myAWSIoTMQTTClient.disconnect()
 
-#for i in range(20):
-#    myAWSIoTMQTTClient.publish("test/testing", i+1, 1)
-#    print("Published: " + str[i+1] + "to the topic: " + "test/testing")
-
-#disconnect if loop is broken
-myAWSIoTMQTTClient.disconnect()
+if __name__ == "__main__":
+	main()
