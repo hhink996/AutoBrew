@@ -18,7 +18,7 @@ def GetGyro():
 	mpu = mpu6050(0x68)
 	# gets all three angle dimentions
 	data = mpu.get_accel_data()
-	data_string = str(data['y'])
+	data_string = data['y']
 	return data_string
 
 # reads the raw temperature data from the sensor
@@ -63,11 +63,11 @@ while True:
     temp_c, temp_f = GetTemp()
 
     payloadmsg0 = "{"
-    payloadmsg1 = " \"temp_c\": \""
-    payloadmsg2 = " \"angle\": \""
-    payloadmsg3 = "\"}"
+    payloadmsg1 = " \"temp_c\": "
+    payloadmsg2 = " \"angle\": "
+    payloadmsg3 = " }"
 
-    payloadmsg = "{} {} {} {}".format(payloadmsg0, payloadmsg1, temp_c, payloadmsg2, angle, payloadmsg3)
+    payloadmsg = "{} {} {} {} {} {}".format(payloadmsg0, payloadmsg1, temp_c, payloadmsg2, angle, payloadmsg3)
     payloadmsg = json.dumps(payloadmsg)
     payloadmsg_json = json.loads(payloadmsg)
 
