@@ -1,6 +1,6 @@
+from mpu6050 import mpu6050
 import time
 import json
-from mpu6050 import mpu6050
 import os
 import glob
 
@@ -13,14 +13,11 @@ myAWSIoTMQTTClient.configureCredentials("/home/autobrew/newAWS/root.pem", "/home
 #inititialize AWS connection
 myAWSIoTMQTTClient.connect()
 
-#Get the angle
+#Get the angle of the sensor
 def GetGyro():
-	# sets mpu as the physical sensor
 	mpu = mpu6050(0x68)
 	# gets all three angle dimentions
-	# accel_data is actually gyro_data
 	data = mpu.get_accel_data()
-	# sets the correct dimention to a string
 	data_string = str(data['y'])
 	return data_string
 
