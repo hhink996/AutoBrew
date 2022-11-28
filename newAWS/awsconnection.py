@@ -58,7 +58,7 @@ def GetTemp():
 	temp_c, temp_f = read_temp(device_file)
 	return temp_c, temp_f
 
-def ConvertAngle(init, current):
+def ConvertAngle(current):
 	# convert angle reading to gravity between 0.990 - 1.170
 	# ----- EXAMPLE/TEST ------------
 	# 0 = 1.000
@@ -72,14 +72,7 @@ def ConvertAngle(init, current):
 	gravity = round(current, 1)
 	gravity = (gravity / 100) + 1
 	print(gravity)
-	# initial reading of gravity sensor
-	init = 0
-	# current/Final reading of gravity sensor
-	current = 0
-
-	# live update of alcohol content
-	alcoholContent = init - current
-	return alcoholContent
+	
 
 def main():
 	i = 0
@@ -93,12 +86,13 @@ def main():
 	# set current angle to starting reading
 	init = GetGyro()
 	print(str(init) + " : " + str(start))
-	temp = ConvertAngle(init, init)
 	
+
 	#print to screen and send to AWS in json format
 	while True:
 		angle = GetGyro()
 		temp_c, temp_f = GetTemp()
+		ConvertAngle(angle)
 		
 		payloadmsg0 = "{\n"
 		payloadmsg1 = " \"temp_c\": "
