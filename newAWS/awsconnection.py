@@ -61,17 +61,22 @@ def GetTemp():
 def ConvertAngle(current):
 	# convert angle reading to gravity between 0.990 - 1.170
 	# ----- EXAMPLE/TEST ------------
+	# -1 = 0.990
+	# -0.8 = 0.998
 	# 0 = 1.000
 	# 0.2 = 1.002
 	# 0.4 = 1.004
 	# 0.6 = 1.006
 	# 0.8 = 1.008
 	# 1 = 1.010
-	# 2 = 1.020
+	# 17 = 1.170
 	# --------------------------------
-	gravity = round(current, 1)
-	gravity = (gravity / 100) + 1
-	print(gravity)
+	if current >= -1 and current <= 17:
+		gravity = round(current, 1)
+		gravity = (gravity / 100) + 1
+		print(gravity)
+	else:
+		print("Gyro is reading outside gravity scale.")
 	
 
 def main():
