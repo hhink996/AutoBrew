@@ -81,7 +81,7 @@ def main():
 
 	# set current angle to starting reading
 	init = GetGyro()
-	print(init + " : " + start)
+	print(str(init) + " : " + str(start))
 
 	#print to screen and send to AWS in json format
 	while True:
