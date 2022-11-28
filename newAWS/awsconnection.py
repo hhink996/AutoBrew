@@ -60,7 +60,18 @@ def GetTemp():
 
 def ConvertAngle(init, current):
 	# convert angle reading to gravity between 0.990 - 1.170
-	
+	# ----- EXAMPLE/TEST ------------
+	# 0 = 1.000
+	# 0.2 = 1.002
+	# 0.4 = 1.004
+	# 0.6 = 1.006
+	# 0.8 = 1.008
+	# 1 = 1.010
+	# 2 = 1.020
+	# --------------------------------
+	gravity = round(current, 1)
+	gravity = (gravity / 100) + 1
+	print(gravity)
 	# initial reading of gravity sensor
 	init = 0
 	# current/Final reading of gravity sensor
@@ -82,7 +93,8 @@ def main():
 	# set current angle to starting reading
 	init = GetGyro()
 	print(str(init) + " : " + str(start))
-
+	temp = ConvertAngle(init, init)
+	
 	#print to screen and send to AWS in json format
 	while True:
 		angle = GetGyro()
