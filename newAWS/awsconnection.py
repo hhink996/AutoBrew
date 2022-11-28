@@ -76,7 +76,8 @@ def main():
 	input("Press ENTER to start...")
 
 	start = input("What is the starting gravity reading?: ")
-
+	print(start)
+	
 	#print to screen and send to AWS in json format
 	while True:
 		angle = GetGyro()
