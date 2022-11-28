@@ -58,29 +58,46 @@ def GetTemp():
 	temp_c, temp_f = read_temp(device_file)
 	return temp_c, temp_f
 
+def ConvertAngle(init, current):
+	# convert angle reading to gravity between 0.990 - 1.170
+	
+	# initial reading of gravity sensor
+	init = 0
+	# current/Final reading of gravity sensor
+	current = 0
+
+	# live update of alcohol content
+	alcoholContent = init - current
+	return alcoholContent
+
+
 def main():
 	i= 0
+	input("Press ENTER to start...")
+
+	start = input("What is the starting gravity reading?: ")
+
 	#print to screen and send to AWS in json format
 	while True:
-    		angle = GetGyro()
-    		temp_c, temp_f = GetTemp()
-
-    		payloadmsg0 = "{\n"
-	    	payloadmsg1 = " \"temp_c\": "
-    		payloadmsg4 = ",\n "
-    		payloadmsg2 = " \"angle\": "
-    		payloadmsg3 = "\n}"
-
-    		payloadmsg = "{} {} {} {} {} {} {}".format(payloadmsg0, payloadmsg1, temp_c, payloadmsg4, payloadmsg2, angle, payloadmsg3)
-    		payloadmsg = json.dumps(payloadmsg)
-    		payloadmsg_json = json.loads(payloadmsg)
-
-    		myAWSIoTMQTTClient.publish("device/22/data", payloadmsg_json, 1)
-
-    		print("Published ", i, " to the topic: device/+/data")
-    		i = i + 1
-
-    		time.sleep(5)
+		angle = GetGyro()
+		temp_c, temp_f = GetTemp()
+		
+		payloadmsg0 = "{\n"
+		payloadmsg1 = " \"temp_c\": "
+		payloadmsg4 = ",\n "
+		payloadmsg2 = " \"angle\": "
+		payloadmsg3 = "\n}"
+		
+		payloadmsg = "{} {} {} {} {} {} {}".format(payloadmsg0, payloadmsg1, temp_c, payloadmsg4, payloadmsg2, angle, payloadmsg3)
+		payloadmsg = json.dumps(payloadmsg)
+		payloadmsg_json = json.loads(payloadmsg)
+		
+		myAWSIoTMQTTClient.publish("device/22/data", payloadmsg_json, 1)
+		
+		print("Published ", i, " to the topic: device/+/data")
+		i = i + 1
+		
+		time.sleep(5)
 
 	print("Program ended early")
 	#disconnect if loop is broken
