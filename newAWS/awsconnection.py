@@ -75,9 +75,9 @@ def main():
     		payloadmsg = json.dumps(payloadmsg)
     		payloadmsg_json = json.loads(payloadmsg)
 
-    		myAWSIoTMQTTClient.publish("sensor-info", payloadmsg_json, 1)
+    		myAWSIoTMQTTClient.publish("device/22/data", payloadmsg_json, 1)
 
-    		print("Published ", i, " to the topic: sensor-info")
+    		print("Published ", i, " to the topic: device/+/data")
     		i = i + 1
 
     		time.sleep(5)
