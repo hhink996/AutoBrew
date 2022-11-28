@@ -70,14 +70,19 @@ def ConvertAngle(init, current):
 	alcoholContent = init - current
 	return alcoholContent
 
-
 def main():
-	i= 0
-	input("Press ENTER to start...")
+	i = 0
 
-	start = input("What is the starting gravity reading?: ")
-	print(start)
+	# waits for input to start program
+	input("Press ENTER to start...")
 	
+	# gets the starting gravity reading from user
+	start = input("What is the starting gravity reading?: ")
+
+	# set current angle to starting reading
+	init = GetGyro()
+	print(init + " : " + start)
+
 	#print to screen and send to AWS in json format
 	while True:
 		angle = GetGyro()
