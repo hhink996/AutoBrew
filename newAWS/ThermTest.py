@@ -20,7 +20,7 @@ def read_temp(device_file):
     equals_pos = lines[1].find("t=")
     # gets and calculates the two temperature readings
     if equals_pos != -1:
-        temp_string = lines[1][equals_pos + 2:]
+        temp_string = lines[1][equals_pos + 2 :]
         temp_c = float(temp_string) / 1000.0
         return temp_c
 

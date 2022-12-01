@@ -12,13 +12,14 @@ myAWSIoTMQTTClient.configureEndpoint(
     "a1ccba331h2nwv-ats.iot.us-east-1.amazonaws.com", 8883
 )
 myAWSIoTMQTTClient.configureCredentials(
-    "/home/autobrew/AutoBrew/newAWS/root.pem", 
-    "/home/autobrew/AutoBrew/newAWS/52bb41a1458b2921258a054b70b8de75c99a4680d9ca9d933e9e727e3730896e-private.pem.key", 
-    "/home/autobrew/AutoBrew/newAWS/52bb41a1458b2921258a054b70b8de75c99a4680d9ca9d933e9e727e3730896e-certificate.pem.crt"
+    "/home/autobrew/AutoBrew/newAWS/root.pem",
+    "/home/autobrew/AutoBrew/newAWS/52bb41a1458b2921258a054b70b8de75c99a4680d9ca9d933e9e727e3730896e-private.pem.key",
+    "/home/autobrew/AutoBrew/newAWS/52bb41a1458b2921258a054b70b8de75c99a4680d9ca9d933e9e727e3730896e-certificate.pem.crt",
 )
 
 # inititialize AWS connection
 myAWSIoTMQTTClient.connect()
+
 
 # get the angle of the sensor
 def GetGyro():
@@ -46,7 +47,7 @@ def read_temp(device_file):
     equals_pos = lines[1].find("t=")
     # gets and calculates the two temperature readings
     if equals_pos != -1:
-        temp_string = lines[1][equals_pos+2:]
+        temp_string = lines[1][equals_pos+2 :]
         temp_c = float(temp_string) / 1000.0
         return temp_c
 
@@ -78,7 +79,7 @@ def ConvertAngle(current, adjustment):
     # 1 = 1.010
     # 17 = 1.170
     # --------------------------------
-    
+
     # rounds the angle to the nearest tenth
     # divides by 100 and adds 1 to convert to the gravity scale
     gravity = (round(current, 1) / 100) + adjustment
