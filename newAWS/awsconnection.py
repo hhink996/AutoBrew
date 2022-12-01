@@ -80,6 +80,7 @@ def ConvertAngle(current, adjustment):
 	
 # calculates the appropriate ajustment for the angle convertion
 def InitialReading(sAngle, sGravity):
+    sGravity = float(sGravity)
     # converts the angle to the base scale
     scale = (round(sAngle,1) / 100) + 1
     # takes the starting gravity reading & calculates the appropriate adjustment
