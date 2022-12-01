@@ -1,10 +1,10 @@
 from mpu6050 import mpu6050
+import glob
+import os
 import time
 import json
-import os
-import glob
 
-#load up information for connection to AWS
+# load up information for connection to AWS
 import AWSIoTPythonSDK.MQTTLib as AWSIoTPyMQTT
 myAWSIoTMQTTClient = AWSIoTPyMQTT.AWSIoTMQTTClient("Autobrew")
 myAWSIoTMQTTClient.configureEndpoint("a1ccba331h2nwv-ats.iot.us-east-1.amazonaws.com", 8883)
@@ -12,10 +12,10 @@ myAWSIoTMQTTClient.configureCredentials("/home/autobrew/AutoBrew/newAWS/root.pem
 	"/home/autobrew/AutoBrew/newAWS/52bb41a1458b2921258a054b70b8de75c99a4680d9ca9d933e9e727e3730896e-private.pem.key", 
 	"/home/autobrew/AutoBrew/newAWS/52bb41a1458b2921258a054b70b8de75c99a4680d9ca9d933e9e727e3730896e-certificate.pem.crt")
 
-#inititialize AWS connection
+# inititialize AWS connection
 myAWSIoTMQTTClient.connect()
 
-#Get the angle of the sensor
+# get the angle of the sensor
 def GetGyro():
 	mpu = mpu6050(0x68)
 	# gets all three angle dimentions
@@ -23,12 +23,14 @@ def GetGyro():
 	data_string = data['y']
 	return data_string
 
+
 # reads the raw temperature data from the sensor
 def read_temp_raw(device_file):
 	f = open(device_file, 'r')
 	lines = f.readlines()
 	f.close()
 	return lines
+
 
 # gets the actuall temperature and returns it in C and F
 def read_temp(device_file):
@@ -43,6 +45,7 @@ def read_temp(device_file):
 		temp_c = float(temp_string) / 1000.0
 		return temp_c
 
+
 # gets the temperature from the sensor
 def GetTemp():
 	os.system('modprobe w1-gpio')
@@ -56,6 +59,7 @@ def GetTemp():
 	# reads the actual temperature
 	temp_c = read_temp(device_file)
 	return temp_c
+
 
 # converts the angle to the gravity scale
 def ConvertAngle(current, adjustment):
@@ -77,7 +81,8 @@ def ConvertAngle(current, adjustment):
     gravity = (round(current, 1) / 100) + adjustment
     print(gravity)
     return gravity
-	
+
+
 # calculates the appropriate ajustment for the angle convertion
 def InitialReading(sAngle, sGravity):
     sGravity = float(sGravity)
@@ -87,6 +92,7 @@ def InitialReading(sAngle, sGravity):
     adjustment = (sGravity - scale) + 1
     # returns the adjustment for the angle conversion
     return adjustment
+
 
 def main():
     i = 0
@@ -100,7 +106,7 @@ def main():
     startAngle = GetGyro()
     adjustment = InitialReading(startAngle, startGravity)
 	
-	#print to screen and send to AWS in json format
+	# print to screen and send to AWS in json format
     while True:
         angle = GetGyro()
         gravity = ConvertAngle(angle, adjustment)
@@ -122,8 +128,9 @@ def main():
         time.sleep(20)
     
     print("Program ended early")
-    #disconnect if loop is broken
+    # disconnect if loop is broken
     myAWSIoTMQTTClient.disconnect()
+
 
 if __name__ == "__main__":
     main()

@@ -5,7 +5,7 @@ import time
 
 # reads the raw temperature data from the sensor
 def read_temp_raw(device_file):
-    f = open(device_file, 'r')
+    f = open(device_file, "r")
     lines = f.readlines()
     f.close()
     return lines
@@ -14,10 +14,10 @@ def read_temp_raw(device_file):
 # gets the actuall temperature and returns it in C and F
 def read_temp(device_file):
     lines = read_temp_raw(device_file)
-    while lines[0].strip()[-3:] != 'YES':
+    while lines[0].strip()[-3:] != "YES":
         time.sleep(0.2)
         lines = read_temp_raw(device_file)
-    equals_pos = lines[1].find('t=')
+    equals_pos = lines[1].find("t=")
     # gets and calculates the two temperature readings
     if equals_pos != -1:
         temp_string = lines[1][equals_pos+2:]
@@ -27,8 +27,8 @@ def read_temp(device_file):
 
 # gets the temperature from the sensor
 def GetTemp():
-    os.system('modprobe w1-gpio')
-    os.system('modprobe w1-therm')
+    os.system("modprobe w1-gpio")
+    os.system("modprobe w1-therm")
 
     # sets the device_file to be the data from the sensor
     base_dir = '/sys/bus/w1/devices/'

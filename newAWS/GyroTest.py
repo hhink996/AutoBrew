@@ -6,7 +6,7 @@ def GetGyro():
     mpu = mpu6050(0x68)
     # gets all three angle dimentions
     data = mpu.get_accel_data()
-    data_string = data['y']
+    data_string = data["y"]
     return data_string
 
 
