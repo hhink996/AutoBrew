@@ -8,7 +8,7 @@ import glob
 import AWSIoTPythonSDK.MQTTLib as AWSIoTPyMQTT
 myAWSIoTMQTTClient = AWSIoTPyMQTT.AWSIoTMQTTClient("Autobrew")
 myAWSIoTMQTTClient.configureEndpoint("a1ccba331h2nwv-ats.iot.us-east-1.amazonaws.com", 8883)
-myAWSIoTMQTTClient.configureCredentials("/home/autobrew/newAWS/root.pem", 
+myAWSIoTMQTTClient.configureCredentials("/home/autobrew/AutoBrew/newAWS/root.pem", 
 	"/home/autobrew/newAWS/52bb41a1458b2921258a054b70b8de75c99a4680d9ca9d933e9e727e3730896e-private.pem.key", 
 	"/home/autobrew/newAWS/52bb41a1458b2921258a054b70b8de75c99a4680d9ca9d933e9e727e3730896e-certificate.pem.crt")
 
