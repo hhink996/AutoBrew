@@ -41,10 +41,9 @@ def read_temp(device_file):
 	if equals_pos != -1:
 		temp_string = lines[1][equals_pos+2:]
 		temp_c = float(temp_string) / 1000.0
-		temp_f = temp_c * 9.0 / 5.0 + 32.0
-		return temp_c, temp_f
+		return temp_c
 
-# gets the tempurature from the sensor
+# gets the temperature from the sensor
 def GetTemp():
 	os.system('modprobe w1-gpio')
 	os.system('modprobe w1-therm')
@@ -55,10 +54,11 @@ def GetTemp():
 	device_file = device_folder + '/w1_slave'
 
 	# reads the actual temperature
-	temp_c, temp_f = read_temp(device_file)
-	return temp_c, temp_f
+	temp_c = read_temp(device_file)
+	return temp_c
 
-def ConvertAngle(current):
+# converts the angle to the gravity scale
+def ConvertAngle(current, adjustment):
 	# convert angle reading to gravity between 0.990 - 1.170
 	# ----- EXAMPLE/TEST ------------
 	# -1 = 0.990
@@ -71,54 +71,58 @@ def ConvertAngle(current):
 	# 1 = 1.010
 	# 17 = 1.170
 	# --------------------------------
-	if current >= -1 and current <= 17:
-		gravity = round(current, 1)
-		gravity = (gravity / 100) + 1
-		print(gravity)
-	else:
-		print("Gyro is reading outside gravity scale.")
+    
+    # rounds the angle to the nearest tenth
+    # divides by 100 and adds 1 to convert to the gravity scale
+    gravity = (round(current, 1) / 100) + adjustment
+    print(gravity)
+    return gravity
 	
+# calculates the appropriate ajustment for the angle convertion
+def InitialReading(sAngle, sGravity):
+    # converts the angle to the base scale
+    scale = (round(sAngle,1) / 100) + 1
+    # takes the starting gravity reading & calculates the appropriate adjustment
+    adjustment = (sGravity - scale) + 1
+    # returns the adjustment for the angle conversion
+    return adjustment
 
 def main():
-	i = 0
-
-	# waits for input to start program
-	input("Press ENTER to start...")
+    i = 0
+    # waits for input to start program
+    input("Press ENTER to start...")
+    
+    # gets the starting gravity reading from user
+    startGravity = input("What is the starting gravity reading?: ")
+    
+    # set current angle to starting reading
+    startAngle = GetGyro()
+    adjustment = InitialReading(startAngle, startGravity)
 	
-	# gets the starting gravity reading from user
-	start = input("What is the starting gravity reading?: ")
-
-	# set current angle to starting reading
-	init = GetGyro()
-	print(str(init) + " : " + str(start))
-	
-
 	#print to screen and send to AWS in json format
-	while True:
-		angle = GetGyro()
-		temp_c, temp_f = GetTemp()
-		ConvertAngle(angle)
+    while True:
+        angle = GetGyro()
+        gravity = ConvertAngle(angle, adjustment)
+        temp_c = GetTemp()
+        
+        payloadmsg0 = "{\n\"temp_c\": "
+        payloadmsg1 = ",\n\"gravity\": "
+        payloadmsg2 = "\n}"
 		
-		payloadmsg0 = "{\n"
-		payloadmsg1 = " \"temp_c\": "
-		payloadmsg4 = ",\n "
-		payloadmsg2 = " \"angle\": "
-		payloadmsg3 = "\n}"
+        payloadmsg = "{} {} {} {} {}".format(payloadmsg0, temp_c, payloadmsg1, gravity, payloadmsg2)
+        payloadmsg = json.dumps(payloadmsg)
+        payloadmsg_json = json.loads(payloadmsg)
 		
-		payloadmsg = "{} {} {} {} {} {} {}".format(payloadmsg0, payloadmsg1, temp_c, payloadmsg4, payloadmsg2, angle, payloadmsg3)
-		payloadmsg = json.dumps(payloadmsg)
-		payloadmsg_json = json.loads(payloadmsg)
+        myAWSIoTMQTTClient.publish("device/22/data", payloadmsg_json, 1)
 		
-		myAWSIoTMQTTClient.publish("device/22/data", payloadmsg_json, 1)
+        print("Published ", i, " to the topic: device/+/data")
+        i = i + 1
 		
-		print("Published ", i, " to the topic: device/+/data")
-		i = i + 1
-		
-		time.sleep(5)
-
-	print("Program ended early")
-	#disconnect if loop is broken
-	myAWSIoTMQTTClient.disconnect()
+        time.sleep(20)
+    
+    print("Program ended early")
+    #disconnect if loop is broken
+    myAWSIoTMQTTClient.disconnect()
 
 if __name__ == "__main__":
-	main()
+    main()
