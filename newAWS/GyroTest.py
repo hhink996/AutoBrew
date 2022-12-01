@@ -10,7 +10,7 @@ def GetGyro():
 
 def main():
     angle = GetGyro()
-    print("Test Data: " + angle)
+    print("Test Data: " + str(angle))
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,6 @@
 import time
 import os
+import glob
 
 # reads the raw temperature data from the sensor
 def read_temp_raw(device_file):
@@ -37,7 +38,7 @@ def GetTemp():
 
 def main():
     temp = GetTemp()
-    print("Test Data: " + temp)
+    print("Test Data: " + str(temp))
 
 if __name__ == "__main__":
     main()
