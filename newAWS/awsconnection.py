@@ -13,9 +13,8 @@ myAWSIoTMQTTClient.configureEndpoint(
 )
 myAWSIoTMQTTClient.configureCredentials(
     "/home/autobrew/AutoBrew/newAWS/root.pem",
-    "/home/autobrew/AutoBrew/newAWS/52bb41a1458b2921258a054b70b8de75c99a4680d9ca9d933e9e727e3730896e-private.pem.key",
-    """/home/autobrew/AutoBrew/newAWS/
-    52bb41a1458b2921258a054b70b8de75c99a4680d9ca9d933e9e727e3730896e-certificate.pem.crt""",
+    "/home/autobrew/AutoBrew/newAWS/private.pem.key",
+    "/home/autobrew/AutoBrew/newAWS/certificate.pem.crt",
 )
 
 # inititialize AWS connection
@@ -84,7 +83,7 @@ def ConvertAngle(current, adjustment):
     # rounds the angle to the nearest tenth
     # divides by 100 and adds 1 to convert to the gravity scale
     gravity = (round(current, 1) / 100) + adjustment
-    print(gravity)
+    gravity = round(gravity, 3)
     return gravity
 
 
@@ -116,9 +115,10 @@ def main():
         angle = GetGyro()
         gravity = ConvertAngle(angle, adjustment)
         temp_c = GetTemp()
+        temp_c = round(temp_c, 2)
 
         payloadmsg0 = '{\n"temp_c": '
-        payloadmsg1 = ',\n"gravity": '
+        payloadmsg1 = ',\n"angle": '
         payloadmsg2 = "\n}"
 
         payloadmsg = "{} {} {} {} {}".format(
@@ -129,7 +129,8 @@ def main():
 
         myAWSIoTMQTTClient.publish("device/22/data", payloadmsg_json, 1)
 
-        print("Published ", i, " to the topic: device/+/data")
+        print("\nSending to app...\nTemperature: " + str(temp_c))
+        print("Gravity: " + str(gravity))
         i = i + 1
 
         time.sleep(20)
